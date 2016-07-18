@@ -33,20 +33,6 @@ public class MainActivity extends AppCompatActivity {
         return obser.publish();
     }
 
-    Subscriber<String> mTextSubscriber = new Subscriber<String>() {
-        @Override public void onCompleted() {
-            System.out.println("on complete");
-        }
-
-        @Override public void onError(Throwable e) {
-
-        }
-
-        @Override public void onNext(String s) {
-            tv1.setText(s);
-        }
-    };
-
     Observable.OnSubscribe mObservableAction = new Observable.OnSubscribe<String>() {
         @Override public void call(Subscriber<? super String> subscriber) {
             subscriber.onNext(setValue());
@@ -124,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         obs.subscribe(action1);
         observable = Observable.create(mObservableAction);
         observable.observeOn(AndroidSchedulers.mainThread());
-        observable.subscribe(mTextSubscriber);
+        observable.subscribe(s -> tv1.setText(s));
 
         startBtn.setOnClickListener(e -> mSubscription = obs.connect());
         stopBtn.setOnClickListener(e -> {

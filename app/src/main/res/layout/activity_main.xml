@@ -14,8 +14,8 @@
         android:layout_weight="1">
 
         <TextView
-            android:text="Hello, Walter1"
-            android:layout_width="wrap_content"
+            android:text="Hello, World!"
+            android:layout_width="200px"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/textview1"
@@ -23,7 +23,7 @@
 
         <TextView
             android:text="Hello, Walter2"
-            android:layout_width="wrap_content"
+            android:layout_width="200px"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/textview2"
