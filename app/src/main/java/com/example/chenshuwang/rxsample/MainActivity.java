@@ -2,6 +2,8 @@ package com.example.chenshuwang.rxsample;
 
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.IdRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -17,6 +19,10 @@ import rx.functions.Action1;
 import rx.observables.ConnectableObservable;
 import rx.schedulers.Schedulers;
 
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarBadge;
+import com.roughike.bottombar.OnMenuTabClickListener;
+
 public class MainActivity extends AppCompatActivity {
     private TextView tv1;
     private TextView tv2;
@@ -26,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private String tvText2 = "";
     public static final int UPDATE_TEXT1 = 1;
     public static final int UPDATE_TEXT2 = 2;
+    private BottomBar mBottomBar;
+
 
     private ConnectableObservable<Long> publishObserver() {
         Observable<Long> obser = Observable.interval(1, TimeUnit.SECONDS);
@@ -98,6 +106,31 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         initView();
+
+        mBottomBar = BottomBar.attach(this, savedInstanceState);
+        mBottomBar.setItems(R.menu.bottombar_menu);
+        mBottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
+            @Override
+            public void onMenuTabSelected(@IdRes int menuItemId) {
+                //if (menuItemId == R.id.bottomBarItemOne) {
+                // The user selected item number one.
+                //}
+            }
+
+            @Override
+            public void onMenuTabReSelected(@IdRes int menuItemId) {
+                //if (menuItemId == R.id.bottomBarItemOne) {
+                // The user reselected item number one, scroll your content to top.
+                //}
+            }
+        });
+
+        mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
+        mBottomBar.mapColorForTab(1, 0xFF5D4037);
+        mBottomBar.mapColorForTab(2, "#7B1FA2");
+        mBottomBar.mapColorForTab(3, "#FF5252");
+        mBottomBar.mapColorForTab(4, "#FF9800");
+
         ConnectableObservable<Long> obs = publishObserver();
         Action1 action2 = o -> sendMsg2(o);
         Action1 action1 = o -> {
@@ -118,5 +151,14 @@ public class MainActivity extends AppCompatActivity {
                 mSubscription.unsubscribe();
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Necessary to restore the BottomBar's state, otherwise we would
+        // lose the current tab on orientation change.
+        mBottomBar.onSaveInstanceState(outState);
     }
 }
